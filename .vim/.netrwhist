@@ -1,0 +1,4 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =2
+let g:netrw_dirhist_1='/media/devarshi/HDD/Notes/Tasks/K8s/temp/php-fpm-docker'
+let g:netrw_dirhist_2='/media/devarshi/HDD/rtcamp/inc/inc42/.github/deploy'
