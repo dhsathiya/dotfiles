@@ -60,3 +60,5 @@ web based command (Nope, I don't have verification methods implemented yet.)
 wget -qO setup devarshi.xyz/setup && sudo bash setup
 ```
 
+vim color scheme : https://github.com/sjl/badwolf
+
