@@ -111,7 +111,11 @@ alias ipi='f() { curl ipinfo.io/$1 };f'
 alias um="sudo umacro"
 alias umc="sudo vim /etc/umacro/umacro_conf.yml"
 #google-chrome https://github.com
-#function pswd() {
-#    echo $@
-#   </dev/urandom tr -dc '12345!@#$%qwertQWERTasdfgASDFGzxcvbZXCVB' | head -c$@; echo ''
-#}
+
+# Generates random string.
+# Usage: pswd int
+# Example: pswd 20 -> This will generate a random string of 20 characters.
+function pswd() {
+    #</dev/urandom tr -dc '12345!@$%^&*qwertQWERTasdfgASDFGzxcvbZXCVB' | head -c$@; echo ''
+    </dev/urandom tr -dc "[:graph:]" | head -c$@; echo ''
+}
