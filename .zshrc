@@ -119,3 +119,7 @@ function pswd() {
     #</dev/urandom tr -dc '12345!@$%^&*qwertQWERTasdfgASDFGzxcvbZXCVB' | head -c$@; echo ''
     </dev/urandom tr -dc "[:graph:]" | head -c$@; echo ''
 }
+
+function cert() {
+    curl --insecure -v https://$1 2>&1 | awk 'BEGIN { cert=0 } /^\* Server certificate:/ { cert=1 } /^\*/ { if (cert) print }'
+}
