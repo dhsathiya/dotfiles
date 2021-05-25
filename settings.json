@@ -1,0 +1,42 @@
+// VSCode settings.json
+{
+    "window.zoomLevel": 1,
+    "editor.renderWhitespace": "all",
+    "editor.insertSpaces": false,
+    "workbench.sideBar.location": "right",
+    "phpcs.enable":   true,
+    "phpcs.standard": "WordPress",
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "phpcs.executablePath": "/usr/local/bin/phpcs",
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    //"workbench.startupEditor": "none",
+    //"editor.fontLigatures": true,
+    //"editor.fontFamily": "'Victor Mono Medium'",
+    ////"vscode_custom_css.policy": true,
+    ////"vscode_custom_css.imports": ["file:///home/devarshi/.vscode/style.css"],
+    //"editor.tokenColorCustomizations": {
+    //    "textMateRules": [
+    //    {
+    //      "name": "Documentation",
+    //      "scope": "comment.block.documentation",
+    //      //"settings": { "fontStyle": "italic" }
+    //    },
+    //    {
+    //      "name": "Comment",
+    //      "scope": "comment",
+    //      //"settings": { "fontStyle": "italic" }
+    //    },
+    //  ]
+    //},
+    "extensions.ignoreRecommendations": true,
+    "workbench.startupEditor": "newUntitledFile",
+    "workbench.editor.untitled.hint": "hidden",
+
+    // Open code in full screen always.
+    "window.restoreFullscreen": true,
+    "window.newWindowDimensions": "fullscreen",
+}%
