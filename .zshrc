@@ -1,20 +1,46 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+export PATH="/home/devarshi/.local/bin:$PATH"
+
 # Path to your oh-my-zsh installation.
-  export ZSH="/home/devarshi/.oh-my-zsh"
+export ZSH="/home/devarshi/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="gnzh"
+#ZSH_THEME="gnzh"
+ZSH_THEME="super-minimal"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
 # a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
 # If set to an empty array, this variable will have no effect.
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+
+# No duplicates in zsh history
+HISTSIZE=10000000
+SAVEHIST=10000000
+
+setopt HIST_IGNORE_DUPS          # Don't record an entry that was just recorded again.
+setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history file.
+
+#setopt BANG_HIST                 # Treat the '!' character specially during expansion.
+#setopt EXTENDED_HISTORY          # Write the history file in the ":start:elapsed;command" format.
+#setopt INC_APPEND_HISTORY        # Write to the history file immediately, not when the shell exits.
+#setopt SHARE_HISTORY             # Share history between all sessions.
+#setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicate entries first when trimming history.
+#setopt HIST_IGNORE_DUPS          # Don't record an entry that was just recorded again.
+#setopt HIST_IGNORE_ALL_DUPS      # Delete old recorded entry if new entry is a duplicate.
+#setopt HIST_FIND_NO_DUPS         # Do not display a line previously found.
+#setopt HIST_IGNORE_SPACE         # Don't record an entry starting with a space.
+#setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history file.
+#setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording entry.
+#setopt HIST_VERIFY               # Don't execute immediately upon history expansion.
+#setopt HIST_BEEP                 # Beep when accessing nonexistent history.
+
+
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -62,7 +88,7 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -99,27 +125,104 @@ source $ZSH/oh-my-zsh.sh
 export LANG=en_US.UTF-8
 export LC_CTYPE=en_US.UTF-8
 
-alias lssh="bash /home/devarshi/temp/dialog.sh"
-alias tmuxdev="bash /home/devarshi/HDD/dhsathiya/Notes/bin/tmux-dev.sh"
-alias curlx="curl -XGET -IL"
-alias pswd="</dev/urandom tr -dc '12345!@#$%qwertQWERTasdfgASDFGzxcvbZXCVB' | head -c 15; echo ''"
+[[ -f ~/.kubectl_aliases ]] && source ~/.kubectl_aliases
+
+function get_namespace_from_repo() {
+    [[ -z "$1" ]] && STRING="$GITHUB_REPOSITORY" || STRING="$1"
+    strip_rtcamp_prefix=${STRING##*rtCamp/}
+    strip_rtcamp_prefix=${strip_rtcamp_prefix##*rtcamp/}
+    replace_slash_with_hyphen=${strip_rtcamp_prefix//\//\-}
+    replace_dot_with_hyphen=${replace_slash_with_hyphen//./-}
+    lower_case=$(echo "$replace_dot_with_hyphen" | tr '[:upper:]' '[:lower:]')
+    strip_numbers_at_end=$(echo "$lower_case" | sed -e 's/\([0-9]\)*$//g')
+    strip_hyphen_at_end=$(echo "$strip_numbers_at_end" | sed -e 's/\(-\)*$//g')
+    echo "$strip_hyphen_at_end"
+}
+
+function get_pod_name() {
+    NAMESPACE=$(get_namespace_from_repo)
+    export DEPLOYMENT_NAME="$NAMESPACE-$DEFAULT_DEV_BRANCH"
+    echo $(kubectl get pod -l app="$DEPLOYMENT_NAME" -o jsonpath="{.items[0].metadata.name}")
+}
+
+alias lssh="bash /home/devarshi/bin/lssh.sh"
+alias tmuxdev="bash /home/devarshi/bin/tmuxdev.sh"
+alias tmuxvpn="bash /home/devarshi/bin/tmuxvpn.sh"
+alias curlx="curl -IL"
+#alias pswd="</dev/urandom tr -dc '12345!@#$%qwertQWERTasdfgASDFGzxcvbZXCVB' | head -c 15; echo ''"
 alias hosts="sudo vim /etc/hosts"
 alias resolv="sudo vim /etc/resolv.conf"
 alias emcc="/root/WebAssembly/emsdk/upstream/emscripten/emcc"
-alias notes="cd ~/HDD/dhsathiya/Notes"
+alias notes="cd /media/devarshi/HDD/Workspace/dhsathiya/Notes"
 alias ipi='f() { curl ipinfo.io/$1 };f'
-alias um="sudo umacro"
 alias umc="sudo vim /etc/umacro/umacro_conf.yml"
-#google-chrome https://github.com
-
-# Generates random string.
-# Usage: pswd int
-# Example: pswd 20 -> This will generate a random string of 20 characters.
-function pswd() {
-    #</dev/urandom tr -dc '12345!@$%^&*qwertQWERTasdfgASDFGzxcvbZXCVB' | head -c$@; echo ''
-    </dev/urandom tr -dc "[:graph:]" | head -c$@; echo ''
+alias ee="sudo /mnt/sdb1/easyengine/easyengine/bin/ee"
+alias um="sudo umacro"
+alias workspace="cd /media/devarshi/HDD/Workspace"
+alias storm="/home/devarshi/Downloads/PhpStorm-211.7442.50/bin/phpstorm.sh"
+function mcam() {
+    /home/devarshi/Downloads/droidcam/droidcam-cli -v 192.168.0.$1 4747
 }
 
 function cert() {
     curl --insecure -v https://$1 2>&1 | awk 'BEGIN { cert=0 } /^\* Server certificate:/ { cert=1 } /^\*/ { if (cert) print }'
 }
+#google-chrome https://github.com
+function pswd() {
+    #echo $@
+    #</dev/urandom tr -dc '12345!@$%^&*qwertQWERTasdfgASDFGzxcvbZXCVB' | head -c$@; echo ''
+    #</dev/urandom tr -dc 'a-zA-Z0-9' | head -c$@; echo ''
+    </dev/urandom tr -dc "[:graph:]" | head -c$@; echo ''
+}
+
+function pswds() {
+    </dev/urandom tr -dc 'a-zA-Z0-9' | head -c$@; echo ''
+}
+
+function vmac() {
+    case $1 in 
+
+    ls)
+        ssh li5 "ls ~/vmac/"
+        ;;
+    up)
+        ssh li5 "cd ~/vmac/$2 && vagrant up"
+        ;;
+    down)
+        ssh li5 "cd ~/vmac/$2 && vagrant halt"
+        ;;
+    *)
+        echo "oops!!"
+        ;;
+    esac
+}
+
+#function ee() {
+#    if [[ "$1" == "cd" ]]; then
+#      case $2 in
+#          app)
+#              cd /opt/easyengine/sites/$2/app
+#          ;;
+#          logs)
+#              cd /opt/easyengine/sites/$2/logs
+#          ;;
+#          config)
+#              cd /opt/easyengine/sites/$2/config
+#          ;;
+#          *)
+#              echo "Error: No such path"
+#          ;;
+#      esac
+#    else
+#      command sudo /mnt/sdb1/easyengine/easyengine/bin/ee "$@"
+#    fi
+#}
+
+fpath=(/media/devarshi/HDD/Workspace/dhsathiya/Notes/rtcamp/autocomplete $fpath)
+#fpath=(/tmp $fpath)
+autoload -Uz compinit
+#compinit
+compinit -d ~/.zcompdump_custom
+#autoload bashcompinit
+#bashcompinit
+
