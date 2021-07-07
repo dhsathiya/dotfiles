@@ -59,7 +59,7 @@ setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history 
 # DISABLE_LS_COLORS="true"
 
 # Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
+DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
 # ENABLE_CORRECTION="true"
@@ -70,7 +70,7 @@ setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
-DISABLE_UNTRACKED_FILES_DIRTY="true"
+#DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
@@ -127,24 +127,6 @@ export LC_CTYPE=en_US.UTF-8
 
 [[ -f ~/.kubectl_aliases ]] && source ~/.kubectl_aliases
 
-function get_namespace_from_repo() {
-    [[ -z "$1" ]] && STRING="$GITHUB_REPOSITORY" || STRING="$1"
-    strip_rtcamp_prefix=${STRING##*rtCamp/}
-    strip_rtcamp_prefix=${strip_rtcamp_prefix##*rtcamp/}
-    replace_slash_with_hyphen=${strip_rtcamp_prefix//\//\-}
-    replace_dot_with_hyphen=${replace_slash_with_hyphen//./-}
-    lower_case=$(echo "$replace_dot_with_hyphen" | tr '[:upper:]' '[:lower:]')
-    strip_numbers_at_end=$(echo "$lower_case" | sed -e 's/\([0-9]\)*$//g')
-    strip_hyphen_at_end=$(echo "$strip_numbers_at_end" | sed -e 's/\(-\)*$//g')
-    echo "$strip_hyphen_at_end"
-}
-
-function get_pod_name() {
-    NAMESPACE=$(get_namespace_from_repo)
-    export DEPLOYMENT_NAME="$NAMESPACE-$DEFAULT_DEV_BRANCH"
-    echo $(kubectl get pod -l app="$DEPLOYMENT_NAME" -o jsonpath="{.items[0].metadata.name}")
-}
-
 alias lssh="bash /home/devarshi/bin/lssh.sh"
 alias tmuxdev="bash /home/devarshi/bin/tmuxdev.sh"
 alias tmuxvpn="bash /home/devarshi/bin/tmuxvpn.sh"
@@ -180,7 +162,7 @@ function pswds() {
 }
 
 function vmac() {
-    case $1 in 
+    case "$1" in 
 
     ls)
         ssh li5 "ls ~/vmac/"
@@ -188,13 +170,35 @@ function vmac() {
     up)
         ssh li5 "cd ~/vmac/$2 && vagrant up"
         ;;
-    down)
+    halt)
         ssh li5 "cd ~/vmac/$2 && vagrant halt"
+        ;;
+    status)
+        ssh li5 "vagrant global-status | awk '!NF{exit}1'"
+        ;;
+    create)
+        ssh li5 "mkdir ~/vmac/$2 && cd ~/vmac/$2 && wget https://raw.githubusercontent.com/dhsathiya/dotfiles/master/Vagrant/Vagrantfile"
+        ;;
+    main-up)
+        #wakeonlan -i 192.168.0.123 ac:16:2d:0b:cf:47
+        wakeonlan  ac:16:2d:0b:cf:47
+        ;;
+    main-ssh)
+        ssh li5
+        ;;
+    main-down)
+        ssh li5 "shutdown -h now"
         ;;
     *)
         echo "oops!!"
         ;;
     esac
+}
+
+# Terminal Title
+DISABLE_UNTRACKED_FILES_DIRTY="true"
+function nt() {
+    echo -n -e "\033]0;$@\007"
 }
 
 #function ee() {
@@ -218,11 +222,17 @@ function vmac() {
 #    fi
 #}
 
-fpath=(/media/devarshi/HDD/Workspace/dhsathiya/Notes/rtcamp/autocomplete $fpath)
+#fpath=(/media/devarshi/HDD/Workspace/dhsathiya/Notes/rtcamp/autocomplete $fpath)
 #fpath=(/tmp $fpath)
-autoload -Uz compinit
+#autoload -Uz compinit
 #compinit
-compinit -d ~/.zcompdump_custom
+#compinit -d ~/.zcompdump_custom
 #autoload bashcompinit
 #bashcompinit
 
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/tmp/google-cloud-sdk/path.zsh.inc' ]; then . '/tmp/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/tmp/google-cloud-sdk/completion.zsh.inc' ]; then . '/tmp/google-cloud-sdk/completion.zsh.inc'; fi
