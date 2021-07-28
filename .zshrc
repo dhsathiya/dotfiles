@@ -59,7 +59,7 @@ setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history 
 # DISABLE_LS_COLORS="true"
 
 # Uncomment the following line to disable auto-setting terminal title.
-DISABLE_AUTO_TITLE="true"
+# DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
 # ENABLE_CORRECTION="true"
@@ -127,6 +127,24 @@ export LC_CTYPE=en_US.UTF-8
 
 [[ -f ~/.kubectl_aliases ]] && source ~/.kubectl_aliases
 
+function get_namespace_from_repo() {
+    [[ -z "$1" ]] && STRING="$GITHUB_REPOSITORY" || STRING="$1"
+    strip_rtcamp_prefix=${STRING##*rtCamp/}
+    strip_rtcamp_prefix=${strip_rtcamp_prefix##*rtcamp/}
+    replace_slash_with_hyphen=${strip_rtcamp_prefix//\//\-}
+    replace_dot_with_hyphen=${replace_slash_with_hyphen//./-}
+    lower_case=$(echo "$replace_dot_with_hyphen" | tr '[:upper:]' '[:lower:]')
+    strip_numbers_at_end=$(echo "$lower_case" | sed -e 's/\([0-9]\)*$//g')
+    strip_hyphen_at_end=$(echo "$strip_numbers_at_end" | sed -e 's/\(-\)*$//g')
+    echo "$strip_hyphen_at_end"
+}
+
+function get_pod_name() {
+    NAMESPACE=$(get_namespace_from_repo)
+    export DEPLOYMENT_NAME="$NAMESPACE-$DEFAULT_DEV_BRANCH"
+    echo $(kubectl get pod -l app="$DEPLOYMENT_NAME" -o jsonpath="{.items[0].metadata.name}")
+}
+
 alias lssh="bash /home/devarshi/bin/lssh.sh"
 alias tmuxdev="bash /home/devarshi/bin/tmuxdev.sh"
 alias tmuxvpn="bash /home/devarshi/bin/tmuxvpn.sh"
@@ -138,10 +156,11 @@ alias emcc="/root/WebAssembly/emsdk/upstream/emscripten/emcc"
 alias notes="cd /media/devarshi/HDD/Workspace/dhsathiya/Notes"
 alias ipi='f() { curl ipinfo.io/$1 };f'
 alias umc="sudo vim /etc/umacro/umacro_conf.yml"
-alias ee="sudo /mnt/sdb1/easyengine/easyengine/bin/ee"
 alias um="sudo umacro"
 alias workspace="cd /media/devarshi/HDD/Workspace"
 alias storm="/home/devarshi/Downloads/PhpStorm-211.7442.50/bin/phpstorm.sh"
+alias p="python3"
+alias rs="rsync -avzhP"
 function mcam() {
     /home/devarshi/Downloads/droidcam/droidcam-cli -v 192.168.0.$1 4747
 }
@@ -180,8 +199,8 @@ function vmac() {
         ssh li5 "mkdir ~/vmac/$2 && cd ~/vmac/$2 && wget https://raw.githubusercontent.com/dhsathiya/dotfiles/master/Vagrant/Vagrantfile"
         ;;
     main-up)
-        #wakeonlan -i 192.168.0.123 ac:16:2d:0b:cf:47
-        wakeonlan  ac:16:2d:0b:cf:47
+        #wakeonlan -i <ip> <mac>
+        wakeonlan <mac>
         ;;
     main-ssh)
         ssh li5
@@ -190,16 +209,24 @@ function vmac() {
         ssh li5 "shutdown -h now"
         ;;
     *)
-        echo "oops!!"
+        echo "Help"
+        echo "ls"
+        echo "up"
+        echo "halt"
+        echo "status"
+        echo "create"
+        echo "main-up"
+        echo "main-ssh"
+        echo "main-down"
         ;;
     esac
 }
 
 # Terminal Title
 DISABLE_UNTRACKED_FILES_DIRTY="true"
-function nt() {
-    echo -n -e "\033]0;$@\007"
-}
+#function nt() {
+#    echo -n -e "\033]0;$@\007"
+#}
 
 #function ee() {
 #    if [[ "$1" == "cd" ]]; then
