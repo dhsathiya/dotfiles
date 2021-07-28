@@ -1,6 +1,11 @@
 # dotfiles
 Backup kinda things !
 
+## GNOME Extensions
+```
+Current_screen_only_for_Alternate_Tab@bourcereau.fr  desktop-icons@csoriano  pixel-saver@deadalnix.me  ubuntu-appindicators@ubuntu.com  ubuntu-dock@ubuntu.com
+```
+
 My script to install oh-my-zsh, tmux and tmux.conf [WIP - Making it completely GitHub base]
 
 ```shell
