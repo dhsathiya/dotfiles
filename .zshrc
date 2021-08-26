@@ -198,9 +198,17 @@ function vmac() {
     create)
         ssh li5 "mkdir ~/vmac/$2 && cd ~/vmac/$2 && wget https://raw.githubusercontent.com/dhsathiya/dotfiles/master/Vagrant/Vagrantfile"
         ;;
+    ip)
+        #ssh li5 "cd ~/vmac && grep -irn 'private_network'"
+        #ssh li5 "cd ~/vmac && for vmac in $(ls); do echo -en $vmac; grep -I --color 'private_network' ./$vmac/Vagrantfile ; done"
+        ssh li5 'cd ~/vmac; for vmac in $(ls); do echo -en $vmac; grep -I --color "private_network" ./$vmac/Vagrantfile; done' | awk '{print $1 "," $5}' | sed "s/\"//g" | column -t -s, 
+        ;;
+    ipsort)
+        ssh li5 'cd ~/vmac; for vmac in $(ls); do echo -en $vmac; grep -I --color "private_network" ./$vmac/Vagrantfile; done' | awk '{print $1 "," $5}' | sed "s/\"//g" | column -t -s, | sort -t. -k1,1n -k2,2n -k3,3n -k4,4n 
+        ;;
     main-up)
-        #wakeonlan -i <ip> <mac>
-        wakeonlan <mac>
+        #wakeonlan -i 192.168.0.123 ac:12:wd:0b:sf:fd
+        wakeonlan  ac:12:wd:0b:sf:fd
         ;;
     main-ssh)
         ssh li5
