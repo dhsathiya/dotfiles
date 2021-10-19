@@ -206,6 +206,8 @@ function vmac() {
     ipsort)
         ssh li5 'cd ~/vmac; for vmac in $(ls); do echo -en $vmac; grep -I --color "private_network" ./$vmac/Vagrantfile; done' | awk '{print $1 "," $5}' | sed "s/\"//g" | column -t -s, | sort -t. -k1,1n -k2,2n -k3,3n -k4,4n 
         ;;
+    ipgen)
+        bash /home/devarshi/bin/vmsshconfiggen.sh
     main-up)
         #wakeonlan -i 192.168.0.123 ac:12:wd:0b:sf:fd
         wakeonlan  ac:12:wd:0b:sf:fd
