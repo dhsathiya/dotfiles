@@ -1,0 +1,88 @@
+{
+    "workbench.colorTheme": "Cobalt2",
+    "editor.fontFamily": "operator Mono, Menlo, Monaco, 'Courier New', monospace",
+    "editor.fontWeight": "100",
+    //"editor.fontSize": 25,
+    "editor.suggestFontSize": 20,
+    "editor.suggestLineHeight": 30,
+    "editor.letterSpacing": 0.5,
+    "editor.tabSize": 2,
+    "editor.cursorWidth": 3,
+    "editor.cursorBlinking": "solid",
+    "editor.minimap.enabled": false,
+    "editor.rulers": [
+        80,
+        100
+    ],
+    "workbench.startupEditor": "newUntitledFile",
+    "editor.scrollBeyondLastLine": true, 
+    "better-comments.tags": [
+        {
+          "tag": "!",
+          "color": "#FF2D00",
+          "strikethrough": false,
+          "underline": false,
+          "backgroundColor": "transparent",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "tag": "?",
+          "color": "#3498DB",
+          "strikethrough": false,
+          "underline": false,
+          "backgroundColor": "transparent",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "tag": "//",
+          "color": "#474747",
+          "strikethrough": true,
+          "underline": false,
+          "backgroundColor": "transparent",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "tag": "todo",
+          "color": "#ffc600",
+          "strikethrough": false,
+          "underline": false,
+          "backgroundColor": "transparent",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "tag": "*",
+          "color": "#98C379",
+          "strikethrough": false,
+          "underline": false,
+          "backgroundColor": "transparent",
+          "bold": false,
+          "italic": false
+        },
+        {
+          "tag": "Solution",
+          "color": "#193549",
+          "strikethrough": false,
+          "underline": true,
+          "backgroundColor": "#ffc600",
+          "bold": true,
+          "italic": true
+        },
+        {
+          "tag": "Task",
+          "color": "#ffc600",
+          "strikethrough": false,
+          "underline": true,
+          "backgroundColor": "Transparent",
+          "bold": true,
+          "italic": true
+        },
+      ],
+      "workbench.iconTheme": "material-icon-theme",
+      "window.zoomLevel": 1,
+    
+
+}
