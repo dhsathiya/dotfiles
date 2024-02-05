@@ -83,6 +83,10 @@ setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
+bindkey -e
+bindkey "\e\e[D" backward-word
+bindkey "\e\e[C" forward-word
+
 # Which plugins would you like to load?
 # Standard plugins can be found in ~/.oh-my-zsh/plugins/*
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
